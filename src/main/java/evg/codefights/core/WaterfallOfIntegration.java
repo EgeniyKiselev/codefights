@@ -35,15 +35,6 @@ public class WaterfallOfIntegration {
 //                {245}
 //        })).forEach(i -> System.out.println(Arrays.toString(i)));
 
-
-//        System.out.println(new WaterfallOfIntegration().getIndexCol(4, 3, 0));
-//        System.out.println(new WaterfallOfIntegration().getIndexCol(4, 3, 3));
-//        System.out.println(new WaterfallOfIntegration().getIndexCol(4, 3, 6));
-//        System.out.println(new WaterfallOfIntegration().getIndexCol(4, 3, 7));
-//        System.out.println(new WaterfallOfIntegration().getIndexCol(4, 3, 8));
-//        System.out.println(new WaterfallOfIntegration().getIndexCol(4, 3, 10));
-//        System.out.println(new WaterfallOfIntegration().getIndexCol(4, 3, 11));
-//        System.out.println(new WaterfallOfIntegration().getIndexCol(4, 3, 13));
     }
 
     boolean sudoku(int[][] grid) {
