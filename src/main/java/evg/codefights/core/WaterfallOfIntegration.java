@@ -26,7 +26,6 @@ public class WaterfallOfIntegration {
                 if (sum != 1) {
                     return false;
                 }
-                sum = 0;
             }
         }
         int[] rows = new int[9];
