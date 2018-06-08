@@ -169,4 +169,31 @@ public class WaterfallOfIntegration {
             return 0;
         }
     }
+
+    int polygonPerimeter(boolean[][] matrix) {
+        int res = 0;
+        int row = matrix.length;
+        int col = matrix[0].length;
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (!matrix[i][j]) {
+                    continue;
+                }
+                if (i == 0 || i > 0 && !matrix[i - 1][j]) {
+                    res++;
+                }
+                if (i == row - 1 || i < row - 1 && !matrix[i + 1][j]) {
+                    res++;
+                }
+                if (j == col - 1 || j < col - 1 && !matrix[i][j + 1]) {
+                    res++;
+                }
+                if (j == 0 || j > 0 && !matrix[i][j - 1]) {
+                    res++;
+                }
+            }
+        }
+        return res;
+    }
+
 }
