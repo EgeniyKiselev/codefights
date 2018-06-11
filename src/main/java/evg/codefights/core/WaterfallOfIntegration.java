@@ -1,12 +1,21 @@
 package evg.codefights.core;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class WaterfallOfIntegration {
 
     //for tests
     public static void main(String[] args) {
-//        WaterfallOfIntegration w = new WaterfallOfIntegration();
+        WaterfallOfIntegration w = new WaterfallOfIntegration();
+        System.out.println(Arrays.toString(w.gravitation(new String[]{"#..##",
+                ".##.#",
+                ".#.##",
+                "....."})));
+        System.out.println(Arrays.toString(w.gravitation(new String[]{
+                "#..##",
+                ".##.#",
+                ".#.##",
+                "..##."})));
 //        int row = 50; int col = 100;
 //        System.out.println("row=" + row + " col=" + col);
 //        for(int i = 0; i < 296; i++) {
@@ -195,5 +204,40 @@ public class WaterfallOfIntegration {
         }
         return res;
     }
+
+    int[] gravitation(String[] rows) {
+        List<Integer> list = new ArrayList<>();
+        int len = rows.length;
+        int count = 0;
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < rows[0].length(); i++) {
+            int n = 0;
+            int c = 0;
+            for (int j = len - 1; j >= 0; j--) {
+                if (rows[j].charAt(i) == '.') {
+                    c++;
+                } else {
+                    n += c;
+                    c = 0;
+                }
+            }
+            if (min > n) {
+                min = n;
+                count = 1;
+            } else if (min == n) {
+                count++;
+            }
+            list.add(n);
+        }
+        int[] res = new int[count];
+        int r = 0;
+        for (int i = 0; i < list.size(); i++) {
+            if (min == list.get(i)) {
+                res[r++] = i;
+            }
+        }
+        return res;
+    }
+
 
 }
