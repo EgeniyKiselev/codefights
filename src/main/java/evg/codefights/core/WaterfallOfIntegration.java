@@ -239,5 +239,18 @@ public class WaterfallOfIntegration {
         return res;
     }
 
-
+    boolean isInformationConsistent(int[][] evidences) {
+        for(int i = 0; i < evidences[0].length; i++) {
+            int last = 0;
+            for(int j = 0; j < evidences.length; j++) {
+                if (evidences[j][i] != 0 && last != 0 && evidences[j][i] != last) {
+                    return false;
+                }
+                if (last == 0) {
+                    last = evidences[j][i];
+                }
+            }
+        }
+        return true;
+    }
 }
