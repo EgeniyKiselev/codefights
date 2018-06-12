@@ -1,21 +1,34 @@
 package evg.codefights.core;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class WaterfallOfIntegration {
 
     //for tests
     public static void main(String[] args) {
         WaterfallOfIntegration w = new WaterfallOfIntegration();
-        System.out.println(Arrays.toString(w.gravitation(new String[]{"#..##",
-                ".##.#",
-                ".#.##",
-                "....."})));
-        System.out.println(Arrays.toString(w.gravitation(new String[]{
-                "#..##",
-                ".##.#",
-                ".#.##",
-                "..##."})));
+        System.out.println("true == " + w.correctNonogram(5, new String[][]{
+                {"-", "-", "-", "-", "-", "-", "-", "-"},
+                {"-", "-", "-", "2", "2", "1", "-", "1"},
+                {"-", "-", "-", "2", "1", "1", "3", "3"},
+                {"-", "3", "1", "#", "#", "#", ".", "#"},
+                {"-", "-", "2", "#", "#", ".", ".", "."},
+                {"-", "-", "2", ".", ".", ".", "#", "#"},
+                {"-", "1", "2", "#", ".", ".", "#", "#"},
+                {"-", "-", "5", "#", "#", "#", "#", "#"}
+        }));
+        System.out.println("false == " + w.correctNonogram(5, new String[][]{
+                {"-", "-", "-", "-", "-", "-", "-", "-"},
+                {"-", "-", "-", "-", "-", "1", "-", "-"},
+                {"-", "-", "-", "3", "3", "2", "5", "5"},
+                {"-", "-", "3", ".", ".", ".", "#", "#"},
+                {"-", "2", "2", "#", "#", "#", "#", "#"},
+                {"-", "-", "5", "#", "#", "#", "#", "#"},
+                {"-", "-", "5", "#", "#", "#", "#", "#"},
+                {"-", "-", "2", ".", ".", ".", "#", "#"}
+        }));
+
 //        int row = 50; int col = 100;
 //        System.out.println("row=" + row + " col=" + col);
 //        for(int i = 0; i < 296; i++) {
@@ -240,9 +253,9 @@ public class WaterfallOfIntegration {
     }
 
     boolean isInformationConsistent(int[][] evidences) {
-        for(int i = 0; i < evidences[0].length; i++) {
+        for (int i = 0; i < evidences[0].length; i++) {
             int last = 0;
-            for(int j = 0; j < evidences.length; j++) {
+            for (int j = 0; j < evidences.length; j++) {
                 if (evidences[j][i] != 0 && last != 0 && evidences[j][i] != last) {
                     return false;
                 }
@@ -253,4 +266,48 @@ public class WaterfallOfIntegration {
         }
         return true;
     }
+
+    boolean correctNonogram(int size, String[][] nonogramField) {
+        int row = nonogramField.length - size;
+        int col = nonogramField[0].length - size;
+        StringBuilder[][] rows = new StringBuilder[size][2];
+        StringBuilder[][] cols = new StringBuilder[size][2];
+        for (int i = 0; i < nonogramField.length; i++) {
+            for (int j = 0; j < nonogramField[0].length; j++) {
+                if (i < row && j < col) {
+                    continue;
+                }
+                int rowIndex = i - row;
+                int colIndex = j - col;
+                if (rowIndex >= 0 && rows[rowIndex][0] == null) {
+                    rows[rowIndex][0] = new StringBuilder();
+                    rows[rowIndex][1] = new StringBuilder();
+                }
+                if (colIndex >= 0 && cols[colIndex][0] == null) {
+                    cols[colIndex][0] = new StringBuilder();
+                    cols[colIndex][1] = new StringBuilder();
+                }
+                String s = nonogramField[i][j];
+                StringBuilder pattern;
+                if (i >= row && j >= col) {
+                    cols[colIndex][1].append(s);
+                    rows[rowIndex][1].append(s);
+                    continue;
+                }
+                if (i < row) {
+                    pattern = cols[colIndex][0];
+                } else {
+                    pattern = rows[rowIndex][0];
+                }
+                if ("-".equals(s)) {
+                    pattern.append("(\\.*)");
+                } else {
+                    int black = Integer.parseInt(s);
+                    pattern.append("(\\#{").append(black).append("})").append("(\\.*)");
+                }
+            }
+        }
+        return Stream.concat(Stream.of(rows), Stream.of(cols)).allMatch(sbt -> sbt[1].toString().matches(sbt[0].toString()));
+    }
+
 }
