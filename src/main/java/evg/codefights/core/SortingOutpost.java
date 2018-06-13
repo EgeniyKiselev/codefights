@@ -6,9 +6,18 @@ public class SortingOutpost {
 
     public static void main(String[] args) {
         SortingOutpost so = new SortingOutpost();
-        System.out.println(so.boxesPacking(new int[]{1, 3, 2}, new int[]{1, 3, 2}, new int[]{1, 3, 2}));
-        System.out.println(so.boxesPacking(new int[]{3, 1, 2}, new int[]{3, 1, 2}, new int[]{3, 2, 1}));
-        System.out.println(so.boxesPacking(new int[]{1, 1}, new int[]{1, 1}, new int[]{1, 1}));
+        System.out.println(so.rowsRearranging(new int[][]{
+                {0, 1},
+                {1, 2},
+                {2, 3},
+                {-1, 4}
+        }));
+
+        System.out.println(so.rowsRearranging(new int[][]{
+                {6, 4},
+                {2, 2},
+                {4, 3},
+        }));
     }
 
     int[] shuffledArray(int[] shuffled) {
@@ -88,6 +97,30 @@ public class SortingOutpost {
             result += counts[i] * a[i];
         }
         return result;
+    }
+
+    boolean rowsRearranging(int[][] matrix) {
+        for (int i = 0; i < matrix.length - 1; i++) {
+            for (int j = i + 1; j < matrix.length; j++) {
+                if (matrix[i][0] > matrix[j][0]) {
+                    swap(matrix, i, j);
+                }
+            }
+        }
+        for (int i = 0; i < matrix.length - 1; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                if (matrix[i][j] >= matrix[i + 1][j]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    void swap(int[][] matrix, int i, int j) {
+        int[] temp = matrix[i];
+        matrix[i] = matrix[j];
+        matrix[j] = temp;
     }
 
 }
