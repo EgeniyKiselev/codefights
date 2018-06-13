@@ -121,6 +121,20 @@ public class SortingOutpost {
         return list.stream().mapToInt(n -> n.number).toArray();
     }
 
+    int uniqueDigitProducts(int[] a) {
+        Set<Integer> set = new HashSet<>();
+        for (int t : a) {
+            int prod = 1;
+            while (t != 0) {
+                int z = t % 10;
+                prod *= z;
+                t /= 10;
+            }
+            set.add(prod);
+        }
+        return set.size();
+    }
+
     class Num implements Comparable<Num> {
         int number;
         int key;
