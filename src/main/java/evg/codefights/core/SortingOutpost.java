@@ -6,18 +6,7 @@ public class SortingOutpost {
 
     public static void main(String[] args) {
         SortingOutpost so = new SortingOutpost();
-        System.out.println(so.rowsRearranging(new int[][]{
-                {0, 1},
-                {1, 2},
-                {2, 3},
-                {-1, 4}
-        }));
-
-        System.out.println(so.rowsRearranging(new int[][]{
-                {6, 4},
-                {2, 2},
-                {4, 3},
-        }));
+//        System.out.println(Arrays.toString(so.digitDifferenceSort(new int[] {152, 23, 7, 887, 243})));
     }
 
     int[] shuffledArray(int[] shuffled) {
@@ -122,5 +111,44 @@ public class SortingOutpost {
         matrix[i] = matrix[j];
         matrix[j] = temp;
     }
+
+    int[] digitDifferenceSort(int[] a) {
+        List<Num> list = new ArrayList<>(a.length);
+        for (int i = 0; i < a.length; i++) {
+            list.add(new Num(a[i], i));
+        }
+        Collections.sort(list);
+        return list.stream().mapToInt(n -> n.number).toArray();
+    }
+
+    class Num implements Comparable<Num> {
+        int number;
+        int key;
+        int index;
+
+        public Num(int number, int index) {
+            this.index = index;
+            this.number = number;
+            int min = Integer.MAX_VALUE;
+            int max = Integer.MIN_VALUE;
+            int t = number;
+            while (t != 0) {
+                int k = t % 10;
+                t /= 10;
+                min = Math.min(min, k);
+                max = Math.max(max, k);
+            }
+            key = max - min;
+        }
+
+        @Override
+        public int compareTo(Num o) {
+            if (key == o.key) {
+                return o.index - index;
+            }
+            return key - o.key;
+        }
+    }
+
 
 }
