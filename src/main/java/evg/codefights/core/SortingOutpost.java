@@ -73,4 +73,21 @@ public class SortingOutpost {
         }
         return true;
     }
+
+    int maximumSum(int[] a, int[][] q) {
+        int[] counts = new int[a.length];
+        for (int i = 0; i < q.length; i++) {
+            for (int k = q[i][0]; k <= q[i][1]; k++) {
+                counts[k]++;
+            }
+        }
+        Arrays.sort(counts);
+        Arrays.sort(a);
+        int result = 0;
+        for (int i = 0; i < counts.length; i++) {
+            result += counts[i] * a[i];
+        }
+        return result;
+    }
+
 }
