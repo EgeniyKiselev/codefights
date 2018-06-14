@@ -15,4 +15,25 @@ public class ChessTavern {
 
         return Math.abs(x1 - x2) == Math.abs(y2 - y1);
     }
+
+    int chessKnightMoves(String cell) {
+        int col = cell.charAt(0) - 'a';
+        int row = cell.charAt(1) - '1';
+        int res = 0;
+        return isValid(col - 1, row - 2) +
+                isValid(col - 2, row - 1) +
+                isValid(col + 1, row + 2) +
+                isValid(col + 2, row + 1) +
+                isValid(col + 1, row - 2) +
+                isValid(col + 2, row - 1) +
+                isValid(col - 1, row + 2) +
+                isValid(col - 2, row + 1);
+    }
+
+    int isValid(int col, int row) {
+        if (col >= 0 && col <= 7 && row >= 0 && row <= 7) {
+            return 1;
+        }
+        return 0;
+    }
 }
