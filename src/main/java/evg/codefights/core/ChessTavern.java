@@ -78,4 +78,57 @@ public class ChessTavern {
         }
     }
 
+    boolean whoseTurn(String p) {
+        String[] arr = p.split(";");
+        int wx1 = arr[0].charAt(0) - 'a';
+        int wy1 = arr[0].charAt(1) - '1';
+        int wx2 = arr[1].charAt(0) - 'a';
+        int wy2 = arr[1].charAt(1) - '1';
+        int bx1 = arr[2].charAt(0) - 'a';
+        int by1 = arr[2].charAt(1) - '1';
+        int bx2 = arr[3].charAt(0) - 'a';
+        int by2 = arr[3].charAt(1) - '1';
+        int w1 = getColor(wx1, wy1);
+        int w2 = getColor(wx2, wy2);
+        int b1 = getColor(bx1, by1);
+        int b2 = getColor(bx2, by2);
+        int sum = 0;
+        if (w1 == 0) sum += 1;
+        if (w2 == 1) sum += 1;
+        if (b1 == 1) sum += 1;
+        if (b2 == 0) sum += 1;
+        return sum % 2 == 0;
+    }
+
+    int getColor(int r, int c) {
+        return (r + c) % 2;
+    }
+
+    int[] chessBishopDream(int[] boardSize, int[] initPosition, int[] initDirection, int k) {
+        int[] result = new int[2];
+        int len = boardSize[0] * boardSize[1] * 2;
+        k = k % (len);
+
+        result[0] = initPosition[0];
+        result[1] = initPosition[1];
+        for (int i = 0; i < k; i++) {
+            if (result[0] == 0 && initDirection[0] == -1) {
+                initDirection[0] = 1;
+            } else if (result[0] == boardSize[0] - 1 && initDirection[0] == 1) {
+                initDirection[0] = -1;
+            } else {
+                result[0] = result[0] + initDirection[0];
+            }
+
+            if (result[1] == 0 && initDirection[1] == -1) {
+                initDirection[1] = 1;
+            } else if (result[1] == boardSize[1] - 1 && initDirection[1] == 1) {
+                initDirection[1] = -1;
+            } else {
+                result[1] = result[1] + initDirection[1];
+            }
+        }
+        return result;
+    }
+
 }
