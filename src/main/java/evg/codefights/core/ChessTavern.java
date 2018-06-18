@@ -1,9 +1,13 @@
 package evg.codefights.core;
 
+import java.util.*;
+
 public class ChessTavern {
 
     public static void main(String[] args) {
-
+        System.out.println(new ChessTavern().chessTriangle(2, 3));
+        System.out.println(new ChessTavern().chessTriangle(1, 30));
+        System.out.println(new ChessTavern().chessTriangle(3, 3));
     }
 
     boolean bishopAndPawn(String bishop, String pawn) {
@@ -130,5 +134,28 @@ public class ChessTavern {
         }
         return result;
     }
+
+    int chessTriangle(int n, int m) {
+        int result = 0;
+        result += findChessTriangle(n, m, 2, 3, 8);
+        result += findChessTriangle(n, m, 3, 2, 8);
+        result += findChessTriangle(n, m, 3, 3, 8) * 2;
+        result += findChessTriangle(n, m, 4, 2, 8);
+        result += findChessTriangle(n, m, 2, 4, 8);
+        result += findChessTriangle(n, m, 4, 3, 8);
+        result += findChessTriangle(n, m, 3, 4, 8);
+        return result;
+    }
+
+    int findChessTriangle(int h, int w, int sizew, int sizeh, int score) {
+        int res = 0;
+        for(int i = 0; i <= h - sizeh; i++) {
+            for (int j = 0; j <= w - sizew; j++) {
+                res += score;
+            }
+        }
+        return res;
+    }
+
 
 }
