@@ -1,9 +1,11 @@
 package evg.codefights.core;
 
+import java.time.format.DateTimeFormatter;
+
 public class TimeRiver {
 
     public static void main(String[] args) {
-
+        System.out.println(new TimeRiver().dayOfWeek("02-29-2072"));
     }
 
     boolean validTime(String time) {
@@ -26,12 +28,30 @@ public class TimeRiver {
 
     int gcd(int a, int b) {
         int t;
-        while(b != 0){
+        while (b != 0) {
             t = a;
             a = b;
-            b = t%b;
+            b = t % b;
         }
         return a;
+    }
+
+    int dayOfWeek(String birthdayDate) {
+    java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("MM-dd-yyyy");
+    java.time.LocalDate parse = java.time.LocalDate.parse(birthdayDate, formatter);
+    String str = birthdayDate.substring(0, birthdayDate.length() - 4);
+    int year = parse.getYear();
+    java.time.DayOfWeek dayOfWeek = parse.getDayOfWeek();
+    boolean leapYear = parse.isLeapYear() && parse.getMonthValue() == 2 && parse.getDayOfMonth() == 29;
+    int res = 0;
+    while (true) {
+        int add = leapYear ? 4 : 1;
+        parse = java.time.LocalDate.parse(str + (year + res + add), formatter);
+        if (dayOfWeek == parse.getDayOfWeek()) {
+            return res + add;
+        }
+        res += add;
+    }
     }
 
 }
