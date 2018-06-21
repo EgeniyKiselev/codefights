@@ -1,7 +1,5 @@
 package evg.codefights.core;
 
-import java.time.format.DateTimeFormatter;
-
 public class TimeRiver {
 
     public static void main(String[] args) {
@@ -37,21 +35,21 @@ public class TimeRiver {
     }
 
     int dayOfWeek(String birthdayDate) {
-    java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("MM-dd-yyyy");
-    java.time.LocalDate parse = java.time.LocalDate.parse(birthdayDate, formatter);
-    String str = birthdayDate.substring(0, birthdayDate.length() - 4);
-    int year = parse.getYear();
-    java.time.DayOfWeek dayOfWeek = parse.getDayOfWeek();
-    boolean leapYear = parse.isLeapYear() && parse.getMonthValue() == 2 && parse.getDayOfMonth() == 29;
-    int res = 0;
-    while (true) {
-        int add = leapYear ? 4 : 1;
-        parse = java.time.LocalDate.parse(str + (year + res + add), formatter);
-        if (dayOfWeek == parse.getDayOfWeek()) {
-            return res + add;
+        java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("MM-dd-yyyy");
+        java.time.LocalDate parse = java.time.LocalDate.parse(birthdayDate, formatter);
+        String str = birthdayDate.substring(0, birthdayDate.length() - 4);
+        int year = parse.getYear();
+        java.time.DayOfWeek dayOfWeek = parse.getDayOfWeek();
+        boolean leapYear = parse.isLeapYear() && parse.getMonthValue() == 2 && parse.getDayOfMonth() == 29;
+        int res = 0;
+        while (true) {
+            int add = leapYear ? 4 : 1;
+            parse = java.time.LocalDate.parse(str + (year + res + add), formatter);
+            if (dayOfWeek == parse.getDayOfWeek()) {
+                return res + add;
+            }
+            res += add;
         }
-        res += add;
-    }
     }
 
 }
