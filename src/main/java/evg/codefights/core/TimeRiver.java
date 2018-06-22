@@ -1,9 +1,15 @@
 package evg.codefights.core;
 
+import java.text.*;
+import java.time.*;
+import java.util.*;
+
 public class TimeRiver {
 
     public static void main(String[] args) {
-        System.out.println(new TimeRiver().dayOfWeek("02-29-2072"));
+        System.out.println(new TimeRiver().curiousClock("2016-08-26 22:40", "2016-08-29 10:00"));
+        System.out.println(new TimeRiver().curiousClock("2016-08-26 22:40", "2016-08-26 22:41"));
+        System.out.println(new TimeRiver().curiousClock("2015-01-14 09:12", "2015-11-04 17:36"));
     }
 
     boolean validTime(String time) {
@@ -52,4 +58,12 @@ public class TimeRiver {
         }
     }
 
+    String curiousClock(String someTime, String leavingTime) {
+        java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        java.time.LocalDateTime date1 = java.time.LocalDateTime.parse(someTime, formatter);
+        java.time.LocalDateTime date2 = java.time.LocalDateTime.parse(leavingTime, formatter);
+        java.time.Duration duration = java.time.Duration.between(date2, date1);
+        java.time.LocalDateTime res = date1.plus(duration);
+        return formatter.format(res);
+    }
 }
