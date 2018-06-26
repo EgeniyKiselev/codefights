@@ -5,7 +5,7 @@ import java.util.regex.*;
 public class RegularHell {
 
     public static void main(String[] args) {
-        System.out.println(new RegularHell().isSubsequence("he sd.f dsk e8.sd??l**23, 23,f.s++83+", "h  8.?*3+"));
+        System.out.println(new RegularHell().eyeRhyme("cough\tbough"));
     }
 
     boolean isSentenceCorrect(String sentence) {
@@ -39,5 +39,13 @@ public class RegularHell {
         System.out.println(regex);
         return regex.matcher(t).find();
     }
+
+    Boolean eyeRhyme(String pairOfLines) {
+        Pattern pattern = Pattern.compile("^.*(.{3})\t.*(.{3})$");
+        Matcher matcher = pattern.matcher(pairOfLines);
+        matcher.matches();
+        return matcher.group(1).equals(matcher.group(2));
+    }
+
 
 }
