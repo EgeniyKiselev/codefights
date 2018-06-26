@@ -5,7 +5,7 @@ import java.util.regex.*;
 public class RegularHell {
 
     public static void main(String[] args) {
-        System.out.println(new RegularHell().eyeRhyme("cough\tbough"));
+        System.out.println(new RegularHell().repetitionEncryption("Hi, hi Jane! I'm so. So glad to to finally be able to write - WRITE!! - to you!"));
     }
 
     boolean isSentenceCorrect(String sentence) {
@@ -45,6 +45,24 @@ public class RegularHell {
         Matcher matcher = pattern.matcher(pairOfLines);
         matcher.matches();
         return matcher.group(1).equals(matcher.group(2));
+    }
+
+    String programTranslation(String solution, String[] args) {
+        String argumentVariants = String.join("|", args);
+        String pattern = "(?<=[^0-9a-zA-Z$_])(" + argumentVariants + ")(?=[^0-9a-zA-Z$_])";
+        String sub = "\\$$1" ;
+        return solution.replaceAll(pattern, sub);
+    }
+
+    int repetitionEncryption(String letter) {
+        Pattern pattern = Pattern.compile("(?i)([A-Za-z]+)[^a-zA-Z]+\\1(?![A-Za-z]+)");
+        Matcher matcher = pattern.matcher(letter);
+
+        int res = 0;
+        while (matcher.find()) {
+            res++;
+        }
+        return res;
     }
 
 
