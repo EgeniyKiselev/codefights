@@ -6,7 +6,8 @@ public class SecretArchives {
 
     public static void main(String[] args) {
 //        System.out.println(new SecretArchives().htmlTable("<table><tr><td>1</td><td>TWO</td></tr><tr><td>three</td><td>FoUr4</td></tr></table>", 1, 2));
-        System.out.println(new SecretArchives().htmlTable("<table><tr><th>CIRCUMFERENCE</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr><tr><td>BITS</td><td>3</td><td>4</td><td>8</td><td>10</td><td>12</td><td>15</td></tr></table>", 0, 6));
+        System.out.println(new SecretArchives().chessNotation("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR"));
+        System.out.println(new SecretArchives().chessNotation1("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR"));
     }
 
     String[] lrc2subRip(String[] lrcLyrics, String songLength) {
@@ -69,4 +70,45 @@ public class SecretArchives {
         return table.substring(beginIndex, table.indexOf("</", index));
     }
 
+    String chessNotation(String notation) {
+        char[][] board = new char[8][8];
+        int i = 0;
+        int j = 0;
+        for (int k = 0; k < notation.length(); k++) {
+            char ch = notation.charAt(k);
+            if (ch == '/') {
+                i++;
+                j = 0;
+                continue;
+            }
+            if (Character.isDigit(ch)) {
+                j += ch - '0';
+                continue;
+            }
+            board[i][j++] = ch;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int col = 0; col < board.length; col++) {
+            if (col != 0) {
+                sb.append('/');
+            }
+            int n = 0;
+            for (int row = board[col].length - 1; row >= 0; row--) {
+                char ch = board[row][col];
+                if (ch == 0) {
+                    n++;
+                } else {
+                    if (n != 0) {
+                        sb.append(n);
+                        n = 0;
+                    }
+                    sb.append(ch);
+                }
+            }
+            if (n != 0) {
+                sb.append(n);
+            }
+        }
+        return sb.toString();
+    }
 }
