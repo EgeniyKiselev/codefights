@@ -1,6 +1,5 @@
 package evg.codefights.core;
 
-import java.util.Arrays;
 import java.util.regex.*;
 
 public class SecretArchives {
@@ -8,16 +7,18 @@ public class SecretArchives {
     public static void main(String[] args) {
 //        System.out.println(new SecretArchives().htmlTable("<table><tr><td>1</td><td>TWO</td></tr><tr><td>three</td><td>FoUr4</td></tr></table>", 1, 2));
 //        System.out.println(new SecretArchives().chessNotation("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR"));
-        Arrays.stream(new SecretArchives().cellsJoining(new String[]{
-                "+----+--+-----+----+",
-                "|abcd|56|!@#$%|qwer|",
-                "|1234|78|^&=()|tyui|",
-                "+----+--+-----+----+",
-                "|zxcv|90|77777|stop|",
-                "+----+--+-----+----+",
-                "|asdf|~~|ghjkl|100$|",
-                "+----+--+-----+----+"
-        }, new int[][]{{2, 0}, {1, 1}})).forEach(t -> System.out.println(t));
+//        System.out.println(new SecretArchives().firstOperationCharacter("((2 + 2) * 2) * 3 + (2 + (2 * 2))"));
+        System.out.println(new SecretArchives().countElements("[\"[   -45,   95]   \", [ 87,  -655]]"));
+//        Arrays.stream(new SecretArchives().cellsJoining(new String[]{
+//                "+----+--+-----+----+",
+//                "|abcd|56|!@#$%|qwer|",
+//                "|1234|78|^&=()|tyui|",
+//                "+----+--+-----+----+",
+//                "|zxcv|90|77777|stop|",
+//                "+----+--+-----+----+",
+//                "|asdf|~~|ghjkl|100$|",
+//                "+----+--+-----+----+"
+//        }, new int[][]{{2, 0}, {1, 1}})).forEach(t -> System.out.println(t));
 
     }
 
@@ -182,5 +183,50 @@ public class SecretArchives {
 
         return table;
     }
+
+    int firstOperationCharacter(String expr) {
+        int brackets = 0;
+        int resultPlus = -1;
+        int resultMult = -1;
+        int indexPlus = -1;
+        int indexMult = -1;
+        for (int i = 0; i < expr.length(); i++) {
+            char ch = expr.charAt(i);
+            if (ch == '(') {
+                brackets++;
+            }
+            if (ch == ')') {
+                brackets--;
+            }
+            if (ch == '+') {
+                if (brackets > resultPlus) {
+                    resultPlus = brackets;
+                    indexPlus = i;
+                }
+            }
+            if (ch == '*') {
+                if (brackets > resultMult) {
+                    resultMult = brackets;
+                    indexMult = i;
+                }
+            }
+        }
+        if (resultPlus > resultMult) {
+            return indexPlus;
+        } else {
+            return indexMult;
+        }
+    }
+
+    int countElements(String inputString) {
+    Pattern p = Pattern.compile("((\".*?\\\")|(true)|(false)|(\\d+))");
+    Matcher matcher = p.matcher(inputString);
+    int res = 0;
+    while (matcher.find()) {
+        res++;
+    }
+    return res;
+    }
+
 
 }
