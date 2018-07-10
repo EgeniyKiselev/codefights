@@ -10,7 +10,26 @@ public class SecretArchives {
 //        System.out.println(new SecretArchives().chessNotation("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR"));
 //        System.out.println(new SecretArchives().firstOperationCharacter("((2 + 2) * 2) * 3 + (2 + (2 * 2))"));
 //        System.out.println(new SecretArchives().countElements("[\"[   -45,   95]   \", [ 87,  -655]]"));
-        System.out.println(Arrays.toString(new SecretArchives().treeBottom("(2 (7 (2 () ()) (6 (5 () ()) (11 () ()))) (5 () (9 (4 () ()) ())))")));
+//        System.out.println(Arrays.toString(new SecretArchives().treeBottom("(2 (7 (2 () ()) (6 (5 () ()) (11 () ()))) (5 () (9 (4 () ()) ())))")));
+//        System.out.println(new SecretArchives().befunge93(new String[] {
+//                ">25*\"!dlrow ,olleH\":v ",
+//                "                 v:,_@",
+//                "                 >  ^ "
+//
+//        }));
+//        System.out.println(new SecretArchives().befunge93(new String[] {
+//                "\"^a&EPm=kY}t/qYC+i9wHye$m N@~x+\"v",
+//                "\"|DsY<\"-\"z6n<[Yo2x|UP5VD:\">:#v_@>",
+//                "-:19+/\"0\"+,19+%\"0\"+,      ^  >39*"
+//
+//        }));
+//        System.out.println(new SecretArchives().befunge93(new String[]{
+//                "v>v>",
+//                "v^v^",
+//                "v^v^",
+//                "v^v^",
+//                ">^>^"
+//        }));
 //        Arrays.stream(new SecretArchives().cellsJoining(new String[]{
 //                "+----+--+-----+----+",
 //                "|abcd|56|!@#$%|qwer|",
@@ -266,6 +285,153 @@ public class SecretArchives {
             r[i] = res.get(i);
         }
         return r;
+    }
+
+    String befunge93(String[] program) {
+        Stack<Integer> stack = new Stack<>();
+        int row = 0;
+        int col = 0;
+        int a = 0;
+        int b = 0;
+        int colDirection = 1;
+        int rowDirection = 0;
+        boolean isString = false;
+        StringBuilder sb = new StringBuilder();
+        boolean isRunning = true;
+        int totalCommands = 0;
+        while (isRunning && sb.length() < 100 && totalCommands++ < 100000) {
+            char ch = program[row].charAt(col);
+
+            if (isString) {
+                if (ch == '"') {
+                    isString = false;
+                } else {
+                    stack.push((int) ch);
+                }
+            } else {
+                switch (ch) {
+                    case '>':
+                        colDirection = 1;
+                        rowDirection = 0;
+                        break;
+                    case '<':
+                        colDirection = -1;
+                        rowDirection = 0;
+                        break;
+                    case 'v':
+                        colDirection = 0;
+                        rowDirection = 1;
+                        break;
+                    case '^':
+                        rowDirection = -1;
+                        colDirection = 0;
+                        break;
+                    case '#':
+                        col += colDirection;
+                        row += rowDirection;
+                        break;
+                    case '_':
+                        a = stack.isEmpty() ? 0 : stack.pop();
+                        rowDirection = 0;
+                        if (a == 0) {
+                            colDirection = 1;
+                        } else {
+                            colDirection = -1;
+                        }
+                        break;
+                    case '|':
+                        a = stack.isEmpty() ? 0 : stack.pop();
+                        colDirection = 0;
+                        if (a == 0) {
+                            rowDirection = 1;
+                        } else {
+                            rowDirection = -1;
+                        }
+                        break;
+                    case '+':
+                        a = stack.isEmpty() ? 0 : stack.pop();
+                        b = stack.isEmpty() ? 0 : stack.pop();
+                        stack.push(a + b);
+                        break;
+                    case '-':
+                        a = stack.isEmpty() ? 0 : stack.pop();
+                        b = stack.isEmpty() ? 0 : stack.pop();
+                        stack.push(b - a);
+                        break;
+                    case '*':
+                        a = stack.isEmpty() ? 0 : stack.pop();
+                        b = stack.isEmpty() ? 0 : stack.pop();
+                        stack.push(a * b);
+                        break;
+                    case '/':
+                        a = stack.isEmpty() ? 0 : stack.pop();
+                        b = stack.isEmpty() ? 0 : stack.pop();
+                        stack.push(b / a);
+                        break;
+                    case '%':
+                        a = stack.isEmpty() ? 0 : stack.pop();
+                        b = stack.isEmpty() ? 0 : stack.pop();
+                        stack.push(b % a);
+                        break;
+                    case '!':
+                        a = stack.isEmpty() ? 0 : stack.pop();
+                        stack.push(a == 0 ? 1 : 0);
+                        break;
+                    case '`':
+                        a = stack.isEmpty() ? 0 : stack.pop();
+                        b = stack.isEmpty() ? 0 : stack.pop();
+                        stack.push(b > a ? 1 : 0);
+                        break;
+                    case ':':
+                        a = stack.isEmpty() ? 0 : stack.peek();
+                        stack.push(a);
+                        break;
+                    case '\\':
+                        a = stack.isEmpty() ? 0 : stack.pop();
+                        b = stack.isEmpty() ? 0 : stack.pop();
+                        stack.push(a);
+                        stack.push(b);
+                        break;
+                    case '$':
+                        a = stack.isEmpty() ? 0 : stack.pop();
+                        break;
+                    case '.':
+                        a = stack.isEmpty() ? 0 : stack.pop();
+                        sb.append(a).append(' ');
+                        break;
+                    case ',':
+                        a = stack.isEmpty() ? 0 : stack.pop();
+                        sb.append((char) a);
+                        break;
+                    case ' ':
+                        break;
+                    case '"':
+                        isString = !isString;
+                        break;
+                    case '@':
+                        isRunning = false;
+                        break;
+                    default:
+                        a = ch - '0';
+                        stack.push(a);
+                }
+            }
+            col += colDirection;
+            row += rowDirection;
+            if (col < 0) {
+                col = program[0].length() - 1;
+            }
+            if (col >= program[0].length()) {
+                col = 0;
+            }
+            if (row < 0) {
+                row = program.length - 1;
+            }
+            if (row >= program.length) {
+                row = 0;
+            }
+        }
+        return sb.toString();
     }
 
 
