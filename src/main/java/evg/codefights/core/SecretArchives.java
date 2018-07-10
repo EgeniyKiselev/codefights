@@ -1,5 +1,6 @@
 package evg.codefights.core;
 
+import java.util.*;
 import java.util.regex.*;
 
 public class SecretArchives {
@@ -8,7 +9,8 @@ public class SecretArchives {
 //        System.out.println(new SecretArchives().htmlTable("<table><tr><td>1</td><td>TWO</td></tr><tr><td>three</td><td>FoUr4</td></tr></table>", 1, 2));
 //        System.out.println(new SecretArchives().chessNotation("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR"));
 //        System.out.println(new SecretArchives().firstOperationCharacter("((2 + 2) * 2) * 3 + (2 + (2 * 2))"));
-        System.out.println(new SecretArchives().countElements("[\"[   -45,   95]   \", [ 87,  -655]]"));
+//        System.out.println(new SecretArchives().countElements("[\"[   -45,   95]   \", [ 87,  -655]]"));
+        System.out.println(Arrays.toString(new SecretArchives().treeBottom("(2 (7 (2 () ()) (6 (5 () ()) (11 () ()))) (5 () (9 (4 () ()) ())))")));
 //        Arrays.stream(new SecretArchives().cellsJoining(new String[]{
 //                "+----+--+-----+----+",
 //                "|abcd|56|!@#$%|qwer|",
@@ -219,13 +221,51 @@ public class SecretArchives {
     }
 
     int countElements(String inputString) {
-    Pattern p = Pattern.compile("((\".*?\\\")|(true)|(false)|(\\d+))");
-    Matcher matcher = p.matcher(inputString);
-    int res = 0;
-    while (matcher.find()) {
-        res++;
+        Pattern p = Pattern.compile("((\".*?\\\")|(true)|(false)|(\\d+))");
+        Matcher matcher = p.matcher(inputString);
+        int res = 0;
+        while (matcher.find()) {
+            res++;
+        }
+        return res;
     }
-    return res;
+
+    int[] treeBottom(String tree) {
+        tree = tree.replaceAll("\\(\\)", "");
+        Stack<Integer> stack = new Stack<Integer>();
+        int height = 0;
+        List<Integer> res = new ArrayList<>();
+        int cur = 0;
+        for (int i = 0; i < tree.length(); i++) {
+            char ch = tree.charAt(i);
+            if (ch == '(' || ch == ' ') {
+                if (cur != 0) {
+                    stack.push(cur);
+                    cur = 0;
+                }
+                continue;
+            }
+            if (ch >= '0' && ch <= '9') {
+                cur = cur * 10 + (ch - '0');
+            }
+            if (ch == ')') {
+                int curHeight = stack.size();
+                int s = stack.pop();
+                if (curHeight == height) {
+                    res.add(s);
+                } else if (curHeight > height) {
+                    res.clear();
+                    ;
+                    height = curHeight;
+                    res.add(s);
+                }
+            }
+        }
+        int[] r = new int[res.size()];
+        for (int i = 0; i < r.length; i++) {
+            r[i] = res.get(i);
+        }
+        return r;
     }
 
 
