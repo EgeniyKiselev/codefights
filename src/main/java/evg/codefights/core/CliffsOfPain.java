@@ -6,13 +6,19 @@ import java.util.stream.*;
 public class CliffsOfPain {
 
     public static void main(String[] args) {
-        System.out.println(new CliffsOfPain().pipesGame(new String[]{
-                "a010",
-                "C01A",
-                "101b",
-                "101B",
-                "c250"
-        }));
+        printArray(new CliffsOfPain().game2048(new int[][]{
+                {0, 0, 0, 0},
+                {0, 0, 2, 2},
+                {0, 0, 2, 4},
+                {2, 2, 4, 8}
+        }, "DD"));
+    }
+
+    static void printArray(int[][] grid) {
+        for (int[] ints : grid) {
+            System.out.println(Arrays.toString(ints));
+        }
+        System.out.println("");
     }
 
     int pipesGame(String[] state) {
@@ -64,7 +70,7 @@ public class CliffsOfPain {
                     queue.addFirst(new Node(-1, -1, node.level, node.pipe, node.direction));
                 }
             } else if (ch >= 'a' && ch <= 'z') {
-                if (node.x - 1 >= 0 &&  allowDirection.get(0).contains(state[node.x - 1].charAt(node.y))) {
+                if (node.x - 1 >= 0 && allowDirection.get(0).contains(state[node.x - 1].charAt(node.y))) {
                     queue.addLast(new Node(node.x - 1, node.y, node.level + 1, node.pipe, 0));
                 }
                 if (node.x + 1 < state.length && allowDirection.get(1).contains(state[node.x + 1].charAt(node.y))) {
@@ -203,6 +209,70 @@ public class CliffsOfPain {
         return isPoison ? -total : total;
     }
 
+    int[][] game2048(int[][] grid, String path) {
+        char[] paths = path.toCharArray();
+        for (char c : paths) {
+            boolean isRow = c == 'R' || c == 'L';
+            int start = c == 'R' || c == 'D' ? 3 : 0;
+            int end = c == 'R' || c == 'D' ? 0 : 3;
+            int add = start < end ? 1 : -1;
+            for (int i = 0; i < grid.length; i++) {
+                int posx = isRow ? i : start;
+                int posy = isRow ? start : i;
+                int v1x = -1;
+                int v1y = -1;
+                for (int j = start; add == -1 ? j >= end : j <= end; j += add) {
+                    int x, y;
+                    if (isRow) {
+                        x = i;
+                        y = j;
+                    } else {
+                        x = j;
+                        y = i;
+                    }
+                    if (grid[x][y] != 0) {
+                        if (v1y == -1) {
+                            v1x = x;
+                            v1y = y;
+                            continue;
+                        }
+                        if (grid[v1x][v1y] == grid[x][y]) {
+                            int tmp = grid[x][y];
+                            grid[v1x][v1y] = 0;
+                            grid[x][y] = 0;
+                            grid[posx][posy] = tmp * 2;
+                            if (isRow) {
+                                posy += add;
+                            } else {
+                                posx += add;
+                            }
+                            v1y = -1;
+                        } else {
+                            int tmp = grid[v1x][v1y];
+                            grid[v1x][v1y] = 0;
+                            grid[posx][posy] = tmp;
+                            if (isRow) {
+                                posy += add;
+                            } else {
+                                posx += add;
+                            }
+                            tmp = grid[x][y];
+                            grid[x][y] = 0;
+                            grid[posx][posy] = tmp;
+                            v1y = posy;
+                            v1x = posx;
+                        }
+                    }
+                }
+                if (v1y != -1) {
+                    int tmp = grid[v1x][v1y];
+                    grid[v1x][v1y] = 0;
+                    grid[posx][posy] = tmp;
+                }
+            }
+        }
+        return grid;
+    }
 
     static class Node {
         int x;
